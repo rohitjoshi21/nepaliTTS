@@ -18,7 +18,6 @@ import os
 from os.path import exists, join, basename, splitext
 git_repo_url = 'https://github.com/NVIDIA/tacotron2.git'
 project_name = splitext(basename(git_repo_url))[0]
-print(project_name)
 
 import sys
 sys.path.append('hifi-gan')
