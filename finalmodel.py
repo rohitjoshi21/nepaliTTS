@@ -1,3 +1,19 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# # Nepali Text-to-Speech with Tacotron2 and Waveglow
+# 
+
+# In[1]:
+
+
+
+
+
+# In[1]:
+
+
+#@title Clone the REPOS
 import os
 from os.path import exists, join, basename, splitext
 git_repo_url = 'https://github.com/NVIDIA/tacotron2.git'
@@ -10,9 +26,7 @@ sys.path.append(project_name)
 import time
 import matplotlib
 import matplotlib.pylab as plt
-import gdown
 
-import IPython.display as ipd
 import numpy as np
 import torch
 import json
@@ -217,7 +231,8 @@ def end_to_end_infer(text, pronounciation_dictionary, show_graphs):
             y_g_hat = hifigan(mel_outputs_postnet.float())
             audio = y_g_hat.squeeze()
             audio = audio * MAX_WAV_VALUE
-            return audio.cpu().numpy().astype("int16"),hparams.sampling_rate
+            print("")
+            ipd.display(ipd.Audio(audio.cpu().numpy().astype("int16"), rate=hparams.sampling_rate))
 
 
 # In[5]:
@@ -242,29 +257,30 @@ model.decoder.max_decoder_steps = 10000 #@param {type:"integer"}
 stop_threshold = 0.324 #@param {type:"number"}
 model.decoder.gate_threshold = stop_threshold
 
-if __name__ == "__main__":
-
-    #@title Synthesize a text
-    print(f"Current Config:\npronounciation_dictionary: {pronounciation_dictionary}\nshow_graphs: {show_graphs}\nmax_duration (in seconds): {max_duration}\nstop_threshold: {stop_threshold}\n\n")
-
-    time.sleep(1)
-    print("Enter/Paste your text.")
-    contents = []
-    while True:
-        try:
-            print("-"*50)
-            line = input()
-            if line == "":
-                continue
-            
-        except EOFError:
-            break
-        except KeyboardInterrupt:
-            print("Stopping...")
-            break
-
 
 # In[ ]:
+
+
+#@title Synthesize a text
+print(f"Current Config:\npronounciation_dictionary: {pronounciation_dictionary}\nshow_graphs: {show_graphs}\nmax_duration (in seconds): {max_duration}\nstop_threshold: {stop_threshold}\n\n")
+
+time.sleep(1)
+print("Enter/Paste your text.")
+contents = []
+while True:
+    try:
+        print("-"*50)
+        line = input()
+        if line == "":
+            continue
+        end_to_end_infer(line, pronounciation_dictionary, show_graphs)
+    except EOFError:
+        break
+    except KeyboardInterrupt:
+        print("Stopping...")
+        break
+
+
 
 
 
